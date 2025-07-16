@@ -96,14 +96,6 @@ export default function Home() {
                 </div>
               }
             >
-              <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
-                  Bienvenido, {user?.name}
-                </h2>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Puedes subir archivos usando el formulario a continuación.
-                </p>
-              </div>
               <S3Uploader />
             </ConditionalRender>
           </div>

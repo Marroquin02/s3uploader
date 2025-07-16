@@ -55,7 +55,7 @@ KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
    - Valid Redirect URIs: `http://localhost:3000/api/auth/callback/keycloak`
 
 2. **Configurar Roles**:
-   - Crear roles: `admin`, `uploader`, `moderator`, `user`
+   - Crear roles: `admin`, `uploader`, `moderator`
    - Asignar roles a usuarios según necesidades
 
 3. **Configurar Mappers** (opcional):
