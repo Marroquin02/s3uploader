@@ -2,20 +2,24 @@
 
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
+import { useKeycloakLogout } from "./useKeycloakLogout";
 
 export function useAuth() {
   const { data: session, status } = useSession();
+  const { logout, isLoggingOut } = useKeycloakLogout();
 
   const authState = useMemo(() => {
     return {
       isAuthenticated: !!session,
       isLoading: status === "loading",
+      isLoggingOut,
       user: session?.user,
       roles: session?.user?.roles || [],
       groups: session?.user?.groups || [],
       accessToken: session?.accessToken,
+      logout,
     };
-  }, [session, status]);
+  }, [session, status, logout, isLoggingOut]);
 
   return authState;
 }

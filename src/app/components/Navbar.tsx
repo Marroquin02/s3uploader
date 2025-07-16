@@ -1,21 +1,23 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useState } from "react";
+import { useKeycloakLogout } from "../hooks/useKeycloakLogout";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logout, isLoggingOut } = useKeycloakLogout();
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+    logout();
   };
 
   const handleSignIn = () => {
     signIn("keycloak", { callbackUrl: "/" });
   };
 
-  if (status === "loading") {
+  if (status === "loading" || isLoggingOut) {
     return (
       <nav className="bg-white dark:bg-gray-800 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +28,14 @@ export default function Navbar() {
               </span>
             </div>
             <div className="flex items-center">
-              <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-20 rounded"></div>
+              <div className="flex items-center space-x-2">
+                {isLoggingOut && (
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Cerrando sesión...
+                  </span>
+                )}
+                <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-20 rounded"></div>
+              </div>
             </div>
           </div>
         </div>

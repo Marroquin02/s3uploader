@@ -20,7 +20,17 @@ La aplicación utiliza **NextAuth.js** con **Keycloak** como proveedor de identi
 - **Single Sign-On (SSO)**: Integración con sistemas existentes
 - **Gestión de roles**: Control de acceso basado en roles de Keycloak
 - **Sesiones seguras**: Tokens JWT con renovación automática
+- **Logout completo**: Cierre de sesión tanto en la aplicación como en Keycloak
 - **Páginas personalizadas**: Login y error pages adaptadas
+
+### Funcionalidad de Logout
+
+El sistema implementa un **logout completo** que:
+
+1. **Cierra la sesión local**: Elimina la sesión de NextAuth.js
+2. **Redirige a Keycloak**: Termina la sesión SSO en el servidor de identidad
+3. **Limpia todas las sesiones**: Asegura que no queden sesiones activas
+4. **Retorna a la aplicación**: Redirige de vuelta después del logout completo
 
 ### Roles Predefinidos
 
@@ -40,11 +50,20 @@ Crea un archivo `.env.local` basado en `.env.example`:
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key-here
 
-# Keycloak Configuration
+# Keycloak Configuration (Server-side)
 KEYCLOAK_CLIENT_ID=your-keycloak-client-id
 KEYCLOAK_CLIENT_SECRET=your-keycloak-client-secret
 KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
+
+NEXT_PUBLIC_S3_CONFIG_STORAGE_KEY=s3_config
+NEXT_PUBLIC_S3_SALT_KEY=s3_salt
+
+# Keycloak Configuration (Client-side - for logout)
+NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=your-keycloak-client-id
+NEXT_PUBLIC_KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
 ```
+
+> **Nota**: Las variables `NEXT_PUBLIC_*` son necesarias para el logout completo desde el cliente.
 
 ### Configuración de Keycloak
 
