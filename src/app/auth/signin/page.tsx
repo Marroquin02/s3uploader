@@ -1,11 +1,16 @@
 "use client";
 
 import { signIn, getProviders } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import type { ClientSafeProvider, LiteralUnion } from "next-auth/react";
+import type { BuiltInProviderType } from "next-auth/providers/index";
 
-export default function SignIn() {
-  const [providers, setProviders] = useState<any>(null);
+function SignInContent() {
+  const [providers, setProviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
@@ -91,7 +96,7 @@ export default function SignIn() {
 
           <div className="space-y-4">
             {providers &&
-              Object.values(providers).map((provider: any) => (
+              Object.values(providers).map((provider: ClientSafeProvider) => (
                 <div key={provider.name}>
                   <button
                     onClick={() => handleSignIn(provider.id)}
@@ -148,5 +153,27 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-md w-full space-y-8 p-8">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+            <div className="text-center">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-8"></div>
+                <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 }

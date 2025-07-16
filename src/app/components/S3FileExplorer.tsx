@@ -111,12 +111,14 @@ export default function S3FileExplorer({
   useEffect(() => {
     const loadInitialFiles = async () => {
       // Validación más estricta
-      if (!isConfigValid || 
-          !memoizedS3Config.endpoint || 
-          !memoizedS3Config.accessKeyId || 
-          !memoizedS3Config.secretAccessKey || 
-          !memoizedS3Config.bucket ||
-          hasLoadedInitially) {
+      if (
+        !isConfigValid ||
+        !memoizedS3Config.endpoint ||
+        !memoizedS3Config.accessKeyId ||
+        !memoizedS3Config.secretAccessKey ||
+        !memoizedS3Config.bucket ||
+        hasLoadedInitially
+      ) {
         return;
       }
 
@@ -160,6 +162,7 @@ export default function S3FileExplorer({
 
     loadInitialFiles();
   }, [
+    s3Config,
     isConfigValid,
     memoizedS3Config.endpoint,
     memoizedS3Config.accessKeyId,
@@ -473,7 +476,7 @@ export default function S3FileExplorer({
           <p className="text-lg mb-2">
             📁 Arrastra archivos aquí para subirlos
           </p>
-          <p className="text-sm">o usa el botón "Subir Archivos"</p>
+          <p className="text-sm">o usa el botón &quot;Subir Archivos&quot;</p>
         </div>
       </div>
 

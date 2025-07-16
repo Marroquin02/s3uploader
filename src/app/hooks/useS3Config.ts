@@ -20,7 +20,6 @@ export function useS3Config() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [needsPassword, setNeedsPassword] = useState(false);
-  const [masterPassword, setMasterPassword] = useState("");
 
   // Hook de almacenamiento seguro
   const secureStorage = useSecureStorage<S3Config>({
@@ -49,7 +48,6 @@ export function useS3Config() {
           setConfig(loadedConfig);
           setIsConnected(true);
           setNeedsPassword(false);
-          setMasterPassword(password);
         }
       } catch (error) {
         setError("Contraseña incorrecta o datos corruptos");
@@ -74,7 +72,6 @@ export function useS3Config() {
         setConfig(newConfig);
         setIsConnected(true);
         setNeedsPassword(false);
-        setMasterPassword(password);
       } catch (error) {
         setError("Error al guardar la configuración");
         console.error("Error al guardar configuración:", error);
@@ -120,7 +117,6 @@ export function useS3Config() {
     });
     setIsConnected(false);
     setNeedsPassword(false);
-    setMasterPassword("");
     setError("");
   }, [secureStorage]);
 
@@ -138,7 +134,6 @@ export function useS3Config() {
     });
     setIsConnected(false);
     setNeedsPassword(true);
-    setMasterPassword("");
     setError("");
   }, [secureStorage]);
 
@@ -152,7 +147,6 @@ export function useS3Config() {
         setError("");
 
         secureStorage.changePassword(currentPassword, newPassword);
-        setMasterPassword(newPassword);
       } catch (error) {
         setError("Error al cambiar la contraseña");
         console.error("Error al cambiar contraseña:", error);

@@ -7,7 +7,7 @@ import { ConditionalRender } from "./components/ProtectedRoute";
 import { useAuth } from "./hooks/useAuth";
 
 export default function Home() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <AuthWrapper loadingMessage="Inicializando S3 Uploader...">
