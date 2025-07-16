@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
 
   publicRuntimeConfig: {
     basePath,
+    assetPrefix: basePath,
   },
 
   // Configuración de trailing slash para compatibilidad
