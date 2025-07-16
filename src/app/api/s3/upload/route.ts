@@ -5,21 +5,17 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    // Extraer configuración S3
     const endpoint = formData.get("endpoint") as string;
     const region = formData.get("region") as string;
     const accessKeyId = formData.get("accessKeyId") as string;
     const secretAccessKey = formData.get("secretAccessKey") as string;
     const bucket = formData.get("bucket") as string;
 
-    // Extraer configuración de upload
     const folderName = formData.get("folderName") as string;
     const fileName = formData.get("fileName") as string;
 
-    // Extraer archivo
     const file = formData.get("file") as File;
 
-    // Validaciones
     if (!endpoint || !accessKeyId || !secretAccessKey || !bucket) {
       return NextResponse.json(
         { error: "Faltan campos requeridos en la configuración S3" },
@@ -34,7 +30,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Crear cliente S3
     const s3Client = new S3Client({
       endpoint,
       region: region || "us-east-1",
@@ -45,16 +40,13 @@ export async function POST(request: NextRequest) {
       forcePathStyle: true,
     });
 
-    // Convertir archivo a buffer
     const fileBuffer = await file.arrayBuffer();
 
-    // Construir la clave del objeto
     const finalFileName = fileName || file.name;
     const objectKey = folderName
       ? `${folderName}/${finalFileName}`
       : finalFileName;
 
-    // Subir archivo a S3
     const command = new PutObjectCommand({
       Bucket: bucket,
       Key: objectKey,

@@ -8,7 +8,6 @@ export function useBasePath() {
   const [basePath, setBasePath] = useState("");
 
   useEffect(() => {
-    // Obtener basePath desde la configuración pública de Next.js
     const nextData = (
       globalThis as {
         __NEXT_DATA__?: { runtimeConfig?: { basePath?: string } };
@@ -26,7 +25,6 @@ export function useBasePath() {
    * @returns Ruta completa con basePath
    */
   const buildApiPath = (apiPath: string) => {
-    // Asegurar que apiPath comience con /
     const normalizedApiPath = apiPath.startsWith("/") ? apiPath : `/${apiPath}`;
     return `${basePath}${normalizedApiPath}`;
   };

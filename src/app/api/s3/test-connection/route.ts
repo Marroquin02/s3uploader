@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
     const { endpoint, region, accessKeyId, secretAccessKey, bucket } =
       await request.json();
 
-    // Validar que todos los campos requeridos estén presentes
     if (!endpoint || !accessKeyId || !secretAccessKey || !bucket) {
       return NextResponse.json(
         { error: "Faltan campos requeridos en la configuración S3" },
@@ -14,7 +13,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Crear cliente S3
     const s3Client = new S3Client({
       endpoint,
       region: region || "us-east-1",
@@ -25,7 +23,6 @@ export async function POST(request: NextRequest) {
       forcePathStyle: true,
     });
 
-    // Intentar subir un archivo de prueba pequeño
     const testData = new TextEncoder().encode("test-connection");
     await s3Client.send(
       new PutObjectCommand({

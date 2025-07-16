@@ -41,7 +41,6 @@ export default function S3Uploader() {
   const [statusMessage, setStatusMessage] = useState("");
   const [isConfigValid, setIsConfigValid] = useState(false);
 
-  // Validar configuración S3
   const validateS3Config = () => {
     const isValid =
       s3Config.endpoint &&
@@ -52,13 +51,11 @@ export default function S3Uploader() {
     return !!isValid;
   };
 
-  // Manejar cambios en la configuración S3
   const handleS3ConfigChange = (field: keyof S3Config, value: string) => {
     setS3Config((prev) => ({ ...prev, [field]: value }));
     setTimeout(validateS3Config, 100);
   };
 
-  // Manejar cambios en la configuración de subida
   const handleUploadConfigChange = (
     field: keyof UploadConfig,
     value: string
@@ -66,7 +63,6 @@ export default function S3Uploader() {
     setUploadConfig((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Manejar selección de archivo
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
@@ -76,7 +72,6 @@ export default function S3Uploader() {
     }
   };
 
-  // Probar conexión S3
   const testS3Connection = async () => {
     if (!validateS3Config()) {
       setStatusMessage("Por favor, completa toda la configuración de S3");
@@ -113,7 +108,6 @@ export default function S3Uploader() {
     }
   };
 
-  // Subir archivo
   const uploadFile = async () => {
     if (!selectedFile) {
       setStatusMessage("Por favor, selecciona un archivo");
@@ -132,24 +126,19 @@ export default function S3Uploader() {
     setUploadStatus("idle");
 
     try {
-      // Crear FormData para enviar el archivo y la configuración
       const formData = new FormData();
 
-      // Agregar configuración S3
       formData.append("endpoint", s3Config.endpoint);
       formData.append("region", s3Config.region);
       formData.append("accessKeyId", s3Config.accessKeyId);
       formData.append("secretAccessKey", s3Config.secretAccessKey);
       formData.append("bucket", s3Config.bucket);
 
-      // Agregar configuración de upload
       formData.append("folderName", uploadConfig.folderName);
       formData.append("fileName", uploadConfig.fileName);
 
-      // Agregar archivo
       formData.append("file", selectedFile);
 
-      // Simular progreso
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
