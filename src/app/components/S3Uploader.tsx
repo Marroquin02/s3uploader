@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useBasePath } from "../hooks/useBasePath";
+import S3FileExplorer from "./S3FileExplorer";
 
 interface S3Config {
   endpoint: string;
@@ -18,6 +19,10 @@ interface UploadConfig {
 
 export default function S3Uploader() {
   const { buildApiPath } = useBasePath();
+
+  const [activeTab, setActiveTab] = useState<"uploader" | "explorer">(
+    "uploader"
+  );
 
   const [s3Config, setS3Config] = useState<S3Config>({
     endpoint: "",
@@ -181,6 +186,32 @@ export default function S3Uploader() {
 
   return (
     <div className="space-y-6">
+      {/* Pestañas */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+        <div className="flex border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setActiveTab("uploader")}
+            className={`px-6 py-3 font-medium text-sm rounded-tl-lg transition-colors ${
+              activeTab === "uploader"
+                ? "bg-blue-600 text-white border-b-2 border-blue-600"
+                : "text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+            }`}
+          >
+            📤 Subir Archivos
+          </button>
+          <button
+            onClick={() => setActiveTab("explorer")}
+            className={`px-6 py-3 font-medium text-sm transition-colors ${
+              activeTab === "explorer"
+                ? "bg-blue-600 text-white border-b-2 border-blue-600"
+                : "text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+            }`}
+          >
+            📁 Explorador de Archivos
+          </button>
+        </div>
+      </div>
+
       {/* Configuración S3 */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
@@ -269,98 +300,111 @@ export default function S3Uploader() {
         </div>
       </div>
 
-      {/* Configuración de Subida */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-          Configuración de Subida
-        </h2>
+      {/* Contenido según la pestaña activa */}
+      {activeTab === "uploader" ? (
+        <>
+          {/* Configuración de Subida */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+              Configuración de Subida
+            </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Nombre de Carpeta (opcional)
-            </label>
-            <input
-              type="text"
-              value={uploadConfig.folderName}
-              onChange={(e) =>
-                handleUploadConfigChange("folderName", e.target.value)
-              }
-              placeholder="documentos/imagenes"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Nombre de Carpeta (opcional)
+                </label>
+                <input
+                  type="text"
+                  value={uploadConfig.folderName}
+                  onChange={(e) =>
+                    handleUploadConfigChange("folderName", e.target.value)
+                  }
+                  placeholder="documentos/imagenes"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Nombre del Archivo
-            </label>
-            <input
-              type="text"
-              value={uploadConfig.fileName}
-              onChange={(e) =>
-                handleUploadConfigChange("fileName", e.target.value)
-              }
-              placeholder="archivo.jpg"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Selección y Subida de Archivo */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-          Subir Archivo
-        </h2>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Seleccionar Archivo
-            </label>
-            <input
-              type="file"
-              onChange={handleFileSelect}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            />
-          </div>
-
-          {selectedFile && (
-            <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <strong>Archivo seleccionado:</strong> {selectedFile.name}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <strong>Tamaño:</strong>{" "}
-                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <strong>Ruta final:</strong>{" "}
-                {uploadConfig.folderName ? `${uploadConfig.folderName}/` : ""}
-                {uploadConfig.fileName || selectedFile.name}
-              </p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Nombre del Archivo
+                </label>
+                <input
+                  type="text"
+                  value={uploadConfig.fileName}
+                  onChange={(e) =>
+                    handleUploadConfigChange("fileName", e.target.value)
+                  }
+                  placeholder="archivo.jpg"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
             </div>
-          )}
+          </div>
 
-          {isUploading && (
-            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div
-                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
+          {/* Selección y Subida de Archivo */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+              Subir Archivo
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Seleccionar Archivo
+                </label>
+                <input
+                  type="file"
+                  onChange={handleFileSelect}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              </div>
+
+              {selectedFile && (
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <strong>Archivo seleccionado:</strong> {selectedFile.name}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <strong>Tamaño:</strong>{" "}
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <strong>Ruta final:</strong>{" "}
+                    {uploadConfig.folderName
+                      ? `${uploadConfig.folderName}/`
+                      : ""}
+                    {uploadConfig.fileName || selectedFile.name}
+                  </p>
+                </div>
+              )}
+
+              {isUploading && (
+                <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                  <div
+                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
+              )}
+
+              <button
+                onClick={uploadFile}
+                disabled={!selectedFile || !isConfigValid || isUploading}
+                className="w-full px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold"
+              >
+                {isUploading
+                  ? `Subiendo... ${uploadProgress}%`
+                  : "Subir Archivo"}
+              </button>
             </div>
-          )}
-
-          <button
-            onClick={uploadFile}
-            disabled={!selectedFile || !isConfigValid || isUploading}
-            className="w-full px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold"
-          >
-            {isUploading ? `Subiendo... ${uploadProgress}%` : "Subir Archivo"}
-          </button>
-        </div>
-      </div>
+          </div>
+        </>
+      ) : (
+        uploadStatus === "success" && (
+          <S3FileExplorer s3Config={s3Config} isConfigValid={isConfigValid} />
+        )
+      )}
 
       {/* Estado de la operación */}
       {statusMessage && (

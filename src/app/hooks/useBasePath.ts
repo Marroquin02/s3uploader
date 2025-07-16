@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 /**
  * Hook para obtener el basePath configurado en Next.js
@@ -24,10 +24,10 @@ export function useBasePath() {
    * @param apiPath - Ruta de la API (ej: '/api/s3/test-connection')
    * @returns Ruta completa con basePath
    */
-  const buildApiPath = (apiPath: string) => {
+  const buildApiPath = useCallback((apiPath: string) => {
     const normalizedApiPath = apiPath.startsWith("/") ? apiPath : `/${apiPath}`;
     return `${basePath}${normalizedApiPath}`;
-  };
+  }, [basePath]);
 
   return {
     basePath,

@@ -43,9 +43,15 @@ export async function POST(request: NextRequest) {
     const fileBuffer = await file.arrayBuffer();
 
     const finalFileName = fileName || file.name;
-    const objectKey = folderName
-      ? `${folderName}/${finalFileName}`
-      : finalFileName;
+
+    // Normalizar la ruta para evitar dobles barras
+    let objectKey = finalFileName;
+    if (folderName) {
+      const normalizedFolder = folderName.replace(/\/+$/, ""); // Remover barras al final
+      objectKey = normalizedFolder
+        ? `${normalizedFolder}/${finalFileName}`
+        : finalFileName;
+    }
 
     const command = new PutObjectCommand({
       Bucket: bucket,
