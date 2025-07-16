@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth, useAuthorization } from "../hooks/useAuth";
+import { useBasePath } from "../hooks/useBasePath";
 import { ReactNode } from "react";
 
 interface ProtectedRouteProps {
@@ -21,6 +22,7 @@ export default function ProtectedRoute({
   const { isAuthenticated, isLoading } = useAuth();
   const { hasAnyRole, hasAllRoles, hasAnyGroup, hasAllGroups } =
     useAuthorization();
+  const { basePath } = useBasePath();
 
   if (isLoading) {
     return (
@@ -42,7 +44,7 @@ export default function ProtectedRoute({
               Necesitas iniciar sesión para acceder a esta página.
             </p>
             <button
-              onClick={() => (window.location.href = "/auth/signin")}
+              onClick={() => window.location.href = `${basePath}/auth/signin`}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors"
             >
               Iniciar Sesión

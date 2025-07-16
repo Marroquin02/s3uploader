@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
 
   assetPrefix: basePath,
 
+  serverRuntimeConfig: {
+    basePath,
+    assetPrefix: basePath,
+  },
+
   publicRuntimeConfig: {
     basePath,
     assetPrefix: basePath,

@@ -5,8 +5,10 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { ClientSafeProvider, LiteralUnion } from "next-auth/react";
 import type { BuiltInProviderType } from "next-auth/providers/index";
+import { useBasePath } from "../../hooks/useBasePath";
 
 function SignInContent() {
+  const { basePath } = useBasePath();
   const [providers, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
     ClientSafeProvider
@@ -26,7 +28,7 @@ function SignInContent() {
   const handleSignIn = async (providerId: string) => {
     setIsLoading(true);
     try {
-      await signIn(providerId, { callbackUrl: "/" });
+      await signIn(providerId, { callbackUrl: `${basePath}/` });
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
     } finally {
@@ -158,21 +160,23 @@ function SignInContent() {
 
 export default function SignIn() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="max-w-md w-full space-y-8 p-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
-            <div className="text-center">
-              <div className="animate-pulse">
-                <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
-                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-8"></div>
-                <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded"></div>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+          <div className="max-w-md w-full space-y-8 p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+              <div className="text-center">
+                <div className="animate-pulse">
+                  <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-8"></div>
+                  <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <SignInContent />
     </Suspense>
   );

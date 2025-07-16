@@ -3,8 +3,10 @@
 import { useSession, signIn } from "next-auth/react";
 import { useState } from "react";
 import { useKeycloakLogout } from "../hooks/useKeycloakLogout";
+import { useBasePath } from "../hooks/useBasePath";
 
 export default function Navbar() {
+  const { basePath } = useBasePath();
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { logout, isLoggingOut } = useKeycloakLogout();
@@ -14,7 +16,7 @@ export default function Navbar() {
   };
 
   const handleSignIn = () => {
-    signIn("keycloak", { callbackUrl: "/" });
+    signIn("keycloak", { callbackUrl: `${basePath}/` });
   };
 
   if (status === "loading" || isLoggingOut) {

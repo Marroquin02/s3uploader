@@ -5,31 +5,39 @@ export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
     const { pathname } = req.nextUrl;
+    
+    // Obtener el base path de la variable de entorno
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+    
+    // Remover el base path del pathname para comparación
+    const normalizedPath = basePath && pathname.startsWith(basePath) 
+      ? pathname.slice(basePath.length) 
+      : pathname;
 
     const publicRoutes = ["/", "/auth/signin", "/auth/error"];
 
-    if (publicRoutes.includes(pathname)) {
+    if (publicRoutes.includes(normalizedPath)) {
       return NextResponse.next();
     }
 
     if (!token) {
-      return NextResponse.redirect(new URL("/auth/signin", req.url));
+      return NextResponse.redirect(new URL(`${basePath}/auth/signin`, req.url));
     }
 
     const userRoles = token.roles || [];
 
-    if (pathname.startsWith("/admin")) {
+    if (normalizedPath.startsWith("/admin")) {
       if (
         !userRoles.includes("admin") &&
         !userRoles.includes("administrator")
       ) {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
+        return NextResponse.redirect(new URL(`${basePath}/unauthorized`, req.url));
       }
     }
 
-    if (pathname.startsWith("/upload")) {
+    if (normalizedPath.startsWith("/upload")) {
       if (!userRoles.includes("uploader") && !userRoles.includes("admin")) {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
+        return NextResponse.redirect(new URL(`${basePath}/unauthorized`, req.url));
       }
     }
 
