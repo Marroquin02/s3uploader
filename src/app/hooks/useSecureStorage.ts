@@ -39,21 +39,17 @@ export const useSecureStorage = <T>(options: SecureStorageOptions) => {
   const encrypt = useCallback(
     (data: T, password: string): string => {
       try {
-        // Generar salt e IV únicos
         const salt = CryptoJS.lib.WordArray.random(128 / 8).toString();
         const iv = CryptoJS.lib.WordArray.random(128 / 8);
 
-        // Derivar clave de encriptación
         const key = deriveKey(password, salt);
 
-        // Encriptar datos
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, {
           iv: iv,
           mode: CryptoJS.mode.CBC,
           padding: CryptoJS.pad.Pkcs7,
         });
 
-        // Crear objeto con datos encriptados
         const encryptedData: EncryptedData = {
           data: encrypted.toString(),
           salt: salt,
@@ -78,10 +74,8 @@ export const useSecureStorage = <T>(options: SecureStorageOptions) => {
       try {
         const encryptedData: EncryptedData = JSON.parse(encryptedString);
 
-        // Derivar clave de encriptación usando el salt almacenado
         const key = deriveKey(password, encryptedData.salt);
 
-        // Desencriptar datos
         const decrypted = CryptoJS.AES.decrypt(encryptedData.data, key, {
           iv: CryptoJS.enc.Hex.parse(encryptedData.iv),
           mode: CryptoJS.mode.CBC,
@@ -112,7 +106,6 @@ export const useSecureStorage = <T>(options: SecureStorageOptions) => {
         const encryptedData = encrypt(data, password);
         localStorage.setItem(storageKey, encryptedData);
 
-        // Guardar hash de verificación (sin revelar la contraseña)
         const passwordHash = CryptoJS.SHA256(password + saltKey).toString();
         localStorage.setItem(`${storageKey}_hash`, passwordHash);
 
@@ -214,18 +207,15 @@ export const useSecureStorage = <T>(options: SecureStorageOptions) => {
   const changePassword = useCallback(
     (currentPassword: string, newPassword: string): void => {
       try {
-        // Verificar contraseña actual
         if (!verifyPassword(currentPassword)) {
           throw new Error("Contraseña actual incorrecta");
         }
 
-        // Cargar datos con contraseña actual
         const data = loadSecure(currentPassword);
         if (!data) {
           throw new Error("No se pudieron cargar los datos");
         }
 
-        // Guardar con nueva contraseña
         saveSecure(data, newPassword);
       } catch (error) {
         console.error("Error al cambiar contraseña:", error);
@@ -236,17 +226,14 @@ export const useSecureStorage = <T>(options: SecureStorageOptions) => {
   );
 
   return {
-    // Estado
     isUnlocked,
     hasStoredData: hasStoredData(),
 
-    // Métodos principales
     saveSecure,
     loadSecure,
     updateSecure,
     clearSecure,
 
-    // Gestión de sesión
     lock,
     verifyPassword,
     changePassword,

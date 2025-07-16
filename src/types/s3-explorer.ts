@@ -1,9 +1,7 @@
-// Interfaces para el explorador de archivos S3
-
 export interface S3Item {
   name: string;
   fullPath: string;
-  type: 'file' | 'folder';
+  type: "file" | "folder";
   size: number;
   lastModified: string | null;
 }
@@ -27,6 +25,6 @@ export interface FileExplorerState {
 export interface UploadProgress {
   fileName: string;
   progress: number;
-  status: 'uploading' | 'completed' | 'error';
+  status: "uploading" | "completed" | "error";
   error?: string;
 }

@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from "react";
  */
 export function useBasePath() {
   const [basePath, setBasePath] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const nextData = (
@@ -17,6 +18,7 @@ export function useBasePath() {
     const configuredBasePath =
       config?.basePath || process.env.NEXT_PUBLIC_BASE_PATH || "";
     setBasePath(configuredBasePath);
+    setIsLoaded(true); 
   }, []);
 
   /**
@@ -32,5 +34,6 @@ export function useBasePath() {
   return {
     basePath,
     buildApiPath,
+    isLoaded,
   };
 }

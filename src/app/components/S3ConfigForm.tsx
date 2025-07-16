@@ -29,7 +29,6 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
   const [showPasswords, setShowPasswords] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
 
-  // Validar fortaleza de contraseña
   const calculatePasswordStrength = (pwd: string): number => {
     let strength = 0;
     if (pwd.length >= 8) strength += 1;

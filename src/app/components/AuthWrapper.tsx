@@ -15,11 +15,9 @@ export default function AuthWrapper({
 }: AuthWrapperProps) {
   const { isLoading } = useAuth();
 
-  // Mostrar loading mientras se verifica la autenticación
   if (isLoading) {
     return <AuthLoading message={loadingMessage} />;
   }
 
-  // Una vez verificado el estado, mostrar el contenido
   return <>{children}</>;
 }

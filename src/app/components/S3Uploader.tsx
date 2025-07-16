@@ -82,11 +82,9 @@ export default function S3Uploader() {
   };
 
   const handleSaveConfig = async (newConfig: S3Config, password: string) => {
-    // Primero probar la conexión
     const connectionSuccess = await testS3Connection(newConfig);
 
     if (connectionSuccess) {
-      // Si la conexión es exitosa, guardar la configuración
       await saveConfig(newConfig, password);
       setShowConfigForm(false);
     }
@@ -113,7 +111,6 @@ export default function S3Uploader() {
     setStatusMessage("");
   };
 
-  // Si está conectado y desbloqueado, mostrar el explorador
   if (isConnected && isUnlocked && !showConfigForm) {
     return (
       <div className="space-y-6">
@@ -161,7 +158,6 @@ export default function S3Uploader() {
     );
   }
 
-  // Si necesita contraseña para desbloquear
   if (needsPassword && !showConfigForm) {
     return (
       <PasswordUnlock
@@ -174,7 +170,6 @@ export default function S3Uploader() {
     );
   }
 
-  // Mostrar formulario de configuración
   if (showConfigForm || (!hasStoredData && !needsPassword)) {
     return (
       <div className="space-y-6">
@@ -210,7 +205,6 @@ export default function S3Uploader() {
     );
   }
 
-  // Estado de carga inicial
   return (
     <div className="flex items-center justify-center min-h-[400px]">
       <div className="text-center">

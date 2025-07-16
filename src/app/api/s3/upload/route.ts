@@ -44,10 +44,9 @@ export async function POST(request: NextRequest) {
 
     const finalFileName = fileName || file.name;
 
-    // Normalizar la ruta para evitar dobles barras
     let objectKey = finalFileName;
     if (folderName) {
-      const normalizedFolder = folderName.replace(/\/+$/, ""); // Remover barras al final
+      const normalizedFolder = folderName.replace(/\/+$/, "");
       objectKey = normalizedFolder
         ? `${normalizedFolder}/${finalFileName}`
         : finalFileName;

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { S3Config } from "../../types/s3-explorer";
 import { useSecureStorage } from "./useSecureStorage";
 
-// Configuración desde variables de entorno
 const STORAGE_KEY =
   process.env.NEXT_PUBLIC_S3_CONFIG_STORAGE_KEY || "s3_config_encrypted";
 const SALT_KEY = process.env.NEXT_PUBLIC_S3_SALT_KEY || "s3_config_salt_2024";
@@ -21,13 +20,11 @@ export function useS3Config() {
   const [error, setError] = useState<string>("");
   const [needsPassword, setNeedsPassword] = useState(false);
 
-  // Hook de almacenamiento seguro
   const secureStorage = useSecureStorage<S3Config>({
     storageKey: STORAGE_KEY,
     saltKey: SALT_KEY,
   });
 
-  // Cargar configuración al inicializar
   useEffect(() => {
     if (secureStorage.hasStoredData) {
       setNeedsPassword(true);
@@ -172,7 +169,6 @@ export function useS3Config() {
   }, []);
 
   return {
-    // Estado
     config,
     isConnected,
     isLoading,
@@ -181,7 +177,6 @@ export function useS3Config() {
     hasStoredData: secureStorage.hasStoredData,
     isUnlocked: secureStorage.isUnlocked,
 
-    // Métodos principales
     unlockConfig,
     saveConfig,
     updateConfig,
@@ -190,7 +185,6 @@ export function useS3Config() {
     changePassword,
     validateConfig,
 
-    // Helpers
     setConfig,
     setError,
   };

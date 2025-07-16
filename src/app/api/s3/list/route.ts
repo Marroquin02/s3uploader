@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
 
     const response = await s3Client.send(command);
 
-    // Procesar carpetas (CommonPrefixes)
     const folders = (response.CommonPrefixes || []).map((prefix) => ({
       name:
         prefix.Prefix?.replace(
@@ -50,7 +49,6 @@ export async function POST(request: NextRequest) {
       lastModified: null,
     }));
 
-    // Procesar archivos (Contents)
     const files = (response.Contents || [])
       .filter((obj) => obj.Key !== prefix && !obj.Key?.endsWith("/"))
       .map((obj) => ({

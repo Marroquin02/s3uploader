@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession, signIn } from "next-auth/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useKeycloakLogout } from "../hooks/useKeycloakLogout";
 import { useBasePath } from "../hooks/useBasePath";
 
@@ -11,9 +11,9 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { logout, isLoggingOut } = useKeycloakLogout();
 
-  const handleSignOut = () => {
+  const handleSignOut = useCallback(() => {
     logout();
-  };
+  }, [logout]);
 
   const handleSignIn = () => {
     signIn("keycloak", { callbackUrl: `${basePath}/` });

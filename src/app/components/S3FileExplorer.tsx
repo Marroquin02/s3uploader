@@ -20,7 +20,6 @@ export default function S3FileExplorer({
 }: S3FileExplorerProps) {
   const { buildApiPath } = useBasePath();
 
-  // Memoizar la configuración S3 para evitar recreaciones innecesarias
   const memoizedS3Config = useMemo(
     () => s3Config,
     [
@@ -46,7 +45,6 @@ export default function S3FileExplorer({
   const [newFolderName, setNewFolderName] = useState("");
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
 
-  // Cargar archivos del bucket
   const loadFiles = useCallback(
     async (path: string = "") => {
       if (!isConfigValid) return;
@@ -90,7 +88,6 @@ export default function S3FileExplorer({
     [memoizedS3Config, isConfigValid, buildApiPath]
   );
 
-  // Resetear estado cuando cambie la configuración
   useEffect(() => {
     setHasLoadedInitially(false);
     setState({
@@ -107,10 +104,8 @@ export default function S3FileExplorer({
     memoizedS3Config.bucket,
   ]);
 
-  // Cargar archivos al montar el componente o cambiar la configuración
   useEffect(() => {
     const loadInitialFiles = async () => {
-      // Validación más estricta
       if (
         !isConfigValid ||
         !memoizedS3Config.endpoint ||
@@ -172,12 +167,10 @@ export default function S3FileExplorer({
     hasLoadedInitially,
   ]);
 
-  // Navegar a una carpeta
   const navigateToFolder = (folderPath: string) => {
     loadFiles(folderPath);
   };
 
-  // Navegar hacia atrás
   const navigateBack = () => {
     const pathParts = state.currentPath.split("/").filter(Boolean);
     pathParts.pop();
@@ -185,7 +178,6 @@ export default function S3FileExplorer({
     loadFiles(parentPath);
   };
 
-  // Eliminar archivo
   const deleteFile = async (item: S3Item) => {
     if (!confirm(`¿Estás seguro de que quieres eliminar "${item.name}"?`))
       return;
@@ -214,7 +206,6 @@ export default function S3FileExplorer({
     }
   };
 
-  // Crear carpeta
   const createFolder = async () => {
     if (!newFolderName.trim()) return;
 
@@ -246,11 +237,9 @@ export default function S3FileExplorer({
     }
   };
 
-  // Subir archivos
   const uploadFiles = async (files: FileList) => {
     const fileArray = Array.from(files);
 
-    // Inicializar progreso de subida
     const initialProgress: UploadProgress[] = fileArray.map((file) => ({
       fileName: file.name,
       progress: 0,
@@ -259,7 +248,6 @@ export default function S3FileExplorer({
 
     setUploadProgress(initialProgress);
 
-    // Subir archivos uno por uno
     for (let i = 0; i < fileArray.length; i++) {
       const file = fileArray[i];
 
@@ -274,7 +262,6 @@ export default function S3FileExplorer({
         formData.append("fileName", file.name);
         formData.append("file", file);
 
-        // Simular progreso
         const progressInterval = setInterval(() => {
           setUploadProgress((prev) =>
             prev.map((item, index) =>
@@ -324,14 +311,12 @@ export default function S3FileExplorer({
       }
     }
 
-    // Recargar archivos después de subir
     setTimeout(() => {
       loadFiles(state.currentPath);
       setUploadProgress([]);
     }, 2000);
   };
 
-  // Manejo de drag and drop
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(true);
@@ -352,16 +337,14 @@ export default function S3FileExplorer({
     }
   };
 
-  // Manejo de selección de archivos
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       uploadFiles(files);
     }
-    e.target.value = ""; // Reset input
+    e.target.value = "";
   };
 
-  // Formatear tamaño de archivo
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -370,7 +353,6 @@ export default function S3FileExplorer({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  // Formatear fecha
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "-";
     return new Date(dateString).toLocaleString("es-ES");

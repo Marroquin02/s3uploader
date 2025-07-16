@@ -59,11 +59,17 @@ NEXT_PUBLIC_S3_CONFIG_STORAGE_KEY=s3_config
 NEXT_PUBLIC_S3_SALT_KEY=s3_salt
 
 # Keycloak Configuration (Client-side - for logout)
-NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=your-keycloak-client-id
-NEXT_PUBLIC_KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
+KEYCLOAK_CLIENT_ID_PUBLIC=your-keycloak-client-id
+KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
 ```
 
-> **Nota**: Las variables `NEXT_PUBLIC_*` son necesarias para el logout completo desde el cliente.
+> **⚠️ Configuración con Subpath**: Si usas la imagen Docker `-uploader` o configuras `basePath: "/uploader"`, debes ajustar `NEXTAUTH_URL`:
+> ```bash
+> NEXTAUTH_URL=http://localhost:3000/uploader/api/auth
+> NEXTAUTH_URL_INTERNAL=http://localhost:3000/uploader/api/auth
+> ```
+
+> **Nota**: Las variables de Keycloak ahora se configuran dinámicamente en tiempo de ejecución para mayor flexibilidad en Docker.
 
 ### Configuración de Keycloak
 
@@ -71,7 +77,9 @@ NEXT_PUBLIC_KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
    - Client ID: `s3uploader`
    - Client Protocol: `openid-connect`
    - Access Type: `confidential`
-   - Valid Redirect URIs: `http://localhost:3000/api/auth/callback/keycloak`
+   - Valid Redirect URIs: 
+     - Versión estándar: `http://localhost:3000/api/auth/callback/keycloak`
+     - Versión con subpath: `http://localhost:3000/uploader/api/auth/callback/keycloak`
 
 2. **Configurar Roles**:
    - Crear roles: `admin`, `uploader`, `moderator`
@@ -108,6 +116,34 @@ Accede en: `http://localhost:3000`
 docker run -p 3000:3000 marroquin02/s3uploader:v0.1.0-uploader
 ```
 Accede en: `http://localhost:3000/uploader`
+
+> **⚠️ IMPORTANTE**: Al usar la imagen `-uploader`, es **CRÍTICO** configurar correctamente las variables de entorno de NextAuth:
+> 
+> ```bash
+> # ✅ CORRECTO - Incluir /uploader/api/auth
+> NEXTAUTH_URL=http://localhost:3000/uploader/api/auth
+> NEXTAUTH_URL_INTERNAL=http://localhost:3000/uploader/api/auth
+> 
+> # ❌ INCORRECTO - Sin el subpath
+> NEXTAUTH_URL=http://localhost:3000/api/auth
+> ```
+> 
+> **Ejemplo completo con Docker Compose:**
+> ```yaml
+> version: '3.8'
+> services:
+>   s3uploader:
+>     image: marroquin02/s3uploader:v0.1.0-uploader
+>     ports:
+>       - "3000:3000"
+>     environment:
+>       - NEXTAUTH_URL=http://localhost:3000/uploader/api/auth
+>       - NEXTAUTH_URL_INTERNAL=http://localhost:3000/uploader/api/auth
+>       - NEXTAUTH_SECRET=your-secret-key
+>       - KEYCLOAK_CLIENT_ID=your-client-id
+>       - KEYCLOAK_CLIENT_SECRET=your-client-secret
+>       - KEYCLOAK_ISSUER=https://your-keycloak.com/realms/realm
+> ```
 
 ### Construcción Local (Solo para Desarrollo)
 

@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
       forcePathStyle: true,
     });
 
-    // En S3, las carpetas se crean como objetos vacíos que terminan en "/"
     const folderKey = folderPath.endsWith('/') ? folderPath : `${folderPath}/`;
 
     const command = new PutObjectCommand({
