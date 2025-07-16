@@ -81,16 +81,16 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border">
+    <div className="max-w-2xl mx-auto mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
       <div className="text-center mb-6">
-        <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-          <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-16 h-16 mx-auto mb-4 bg-blue-900 rounded-full flex items-center justify-center">
+          <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Configuración S3 Segura</h2>
-        <p className="text-gray-600">
+        <h2 className="text-2xl font-bold text-white mb-2">Configuración S3 Segura</h2>
+        <p className="text-gray-300">
           Configura tu conexión S3 con encriptación AES-256
         </p>
       </div>
@@ -98,11 +98,11 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Configuración S3 */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Configuración S3</h3>
+          <h3 className="text-lg font-medium text-gray-300 border-b border-gray-600 pb-2">Configuración S3</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="endpoint" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="endpoint" className="block text-sm font-medium text-gray-300 mb-1">
                 Endpoint *
               </label>
               <input
@@ -110,7 +110,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
                 id="endpoint"
                 value={config.endpoint}
                 onChange={(e) => handleConfigChange('endpoint', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="https://s3.amazonaws.com"
                 disabled={isLoading}
                 required
@@ -118,7 +118,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
             </div>
 
             <div>
-              <label htmlFor="region" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="region" className="block text-sm font-medium text-gray-300 mb-1">
                 Región *
               </label>
               <input
@@ -126,7 +126,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
                 id="region"
                 value={config.region}
                 onChange={(e) => handleConfigChange('region', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="us-east-1"
                 disabled={isLoading}
                 required
@@ -134,7 +134,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
             </div>
 
             <div>
-              <label htmlFor="accessKeyId" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="accessKeyId" className="block text-sm font-medium text-gray-300 mb-1">
                 Access Key ID *
               </label>
               <input
@@ -142,7 +142,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
                 id="accessKeyId"
                 value={config.accessKeyId}
                 onChange={(e) => handleConfigChange('accessKeyId', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="AKIAIOSFODNN7EXAMPLE"
                 disabled={isLoading}
                 required
@@ -150,7 +150,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
             </div>
 
             <div>
-              <label htmlFor="bucket" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="bucket" className="block text-sm font-medium text-gray-300 mb-1">
                 Bucket *
               </label>
               <input
@@ -158,7 +158,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
                 id="bucket"
                 value={config.bucket}
                 onChange={(e) => handleConfigChange('bucket', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="mi-bucket"
                 disabled={isLoading}
                 required
@@ -167,7 +167,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
           </div>
 
           <div>
-            <label htmlFor="secretAccessKey" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="secretAccessKey" className="block text-sm font-medium text-gray-300 mb-1">
               Secret Access Key *
             </label>
             <input
@@ -175,7 +175,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
               id="secretAccessKey"
               value={config.secretAccessKey}
               onChange={(e) => handleConfigChange('secretAccessKey', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
               disabled={isLoading}
               required
@@ -185,10 +185,10 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
 
         {/* Configuración de Seguridad */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Seguridad</h3>
+          <h3 className="text-lg font-medium text-gray-300 border-b border-gray-600 pb-2">Seguridad</h3>
           
           <div>
-            <label htmlFor="masterPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="masterPassword" className="block text-sm font-medium text-gray-300 mb-1">
               Contraseña Maestra *
             </label>
             <div className="relative">
@@ -197,7 +197,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
                 id="masterPassword"
                 value={password}
                 onChange={(e) => handlePasswordChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
                 placeholder="Mínimo 8 caracteres"
                 disabled={isLoading}
                 required
@@ -222,12 +222,12 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
             {password && (
               <div className="mt-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Fortaleza:</span>
-                  <span className={`font-medium ${passwordStrength <= 2 ? 'text-red-600' : passwordStrength <= 4 ? 'text-yellow-600' : 'text-green-600'}`}>
+                  <span className="text-gray-400">Fortaleza:</span>
+                  <span className={`font-medium ${passwordStrength <= 2 ? 'text-red-400' : passwordStrength <= 4 ? 'text-yellow-400' : 'text-green-400'}`}>
                     {getPasswordStrengthText()}
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                <div className="w-full bg-gray-600 rounded-full h-2 mt-1">
                   <div 
                     className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`}
                     style={{ width: `${(passwordStrength / 6) * 100}%` }}
@@ -238,7 +238,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-1">
               Confirmar Contraseña *
             </label>
             <input
@@ -246,28 +246,28 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              className={`w-full px-3 py-2 bg-gray-700 border rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                 confirmPassword && password !== confirmPassword 
-                  ? 'border-red-300 bg-red-50' 
-                  : 'border-gray-300'
+                  ? 'border-red-500 bg-red-900' 
+                  : 'border-gray-600'
               }`}
               placeholder="Repite la contraseña"
               disabled={isLoading}
               required
             />
             {confirmPassword && password !== confirmPassword && (
-              <p className="text-sm text-red-600 mt-1">Las contraseñas no coinciden</p>
+              <p className="text-sm text-red-400 mt-1">Las contraseñas no coinciden</p>
             )}
           </div>
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+          <div className="p-3 bg-red-900 border border-red-700 rounded-md">
             <div className="flex">
               <svg className="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-sm text-red-700">{error}</p>
+              <p className="text-sm text-red-300">{error}</p>
             </div>
           </div>
         )}
@@ -296,7 +296,7 @@ export const S3ConfigForm: React.FC<S3ConfigFormProps> = ({
               type="button"
               onClick={onCancel}
               disabled={isLoading}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 border border-gray-600 text-gray-300 bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Cancelar
             </button>
