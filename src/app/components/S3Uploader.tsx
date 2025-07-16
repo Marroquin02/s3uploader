@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useBasePath } from "../hooks/useBasePath";
 
 interface S3Config {
   endpoint: string;
@@ -16,6 +17,8 @@ interface UploadConfig {
 }
 
 export default function S3Uploader() {
+  const { buildApiPath } = useBasePath();
+
   const [s3Config, setS3Config] = useState<S3Config>({
     endpoint: "",
     accessKeyId: "",
@@ -82,7 +85,7 @@ export default function S3Uploader() {
     }
 
     try {
-      const response = await fetch("/api/s3/test-connection", {
+      const response = await fetch(buildApiPath("/api/s3/test-connection"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +160,7 @@ export default function S3Uploader() {
         });
       }, 200);
 
-      const response = await fetch("/api/s3/upload", {
+      const response = await fetch(buildApiPath("/api/s3/upload"), {
         method: "POST",
         body: formData,
       });
