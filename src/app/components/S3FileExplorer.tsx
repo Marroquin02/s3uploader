@@ -18,7 +18,7 @@ export default function S3FileExplorer({
   s3Config,
   isConfigValid,
 }: S3FileExplorerProps) {
-  const { buildApiPath } = useBasePath();
+  const { buildApiPath, isLoaded } = useBasePath();
 
   const memoizedS3Config = useMemo(
     () => s3Config,
@@ -47,7 +47,7 @@ export default function S3FileExplorer({
 
   const loadFiles = useCallback(
     async (path: string = "") => {
-      if (!isConfigValid) return;
+      if (!isConfigValid || !isLoaded) return;
 
       setState((prev) => ({ ...prev, loading: true, error: null }));
 
@@ -85,7 +85,7 @@ export default function S3FileExplorer({
         }));
       }
     },
-    [memoizedS3Config, isConfigValid, buildApiPath]
+    [memoizedS3Config, isConfigValid, buildApiPath, isLoaded]
   );
 
   useEffect(() => {
@@ -108,6 +108,7 @@ export default function S3FileExplorer({
     const loadInitialFiles = async () => {
       if (
         !isConfigValid ||
+        !isLoaded ||
         !memoizedS3Config.endpoint ||
         !memoizedS3Config.accessKeyId ||
         !memoizedS3Config.secretAccessKey ||
@@ -159,12 +160,14 @@ export default function S3FileExplorer({
   }, [
     s3Config,
     isConfigValid,
+    isLoaded,
     memoizedS3Config.endpoint,
     memoizedS3Config.accessKeyId,
     memoizedS3Config.secretAccessKey,
     memoizedS3Config.bucket,
     memoizedS3Config.region,
     hasLoadedInitially,
+    buildApiPath,
   ]);
 
   const navigateToFolder = (folderPath: string) => {
@@ -179,6 +182,11 @@ export default function S3FileExplorer({
   };
 
   const deleteFile = async (item: S3Item) => {
+    if (!isLoaded) {
+      console.log("BasePath not loaded yet, cannot delete file");
+      return;
+    }
+
     if (!confirm(`¿Estás seguro de que quieres eliminar "${item.name}"?`))
       return;
 
@@ -207,6 +215,11 @@ export default function S3FileExplorer({
   };
 
   const createFolder = async () => {
+    if (!isLoaded) {
+      console.log("BasePath not loaded yet, cannot create folder");
+      return;
+    }
+
     if (!newFolderName.trim()) return;
 
     const folderPath = state.currentPath + newFolderName;
@@ -238,6 +251,11 @@ export default function S3FileExplorer({
   };
 
   const uploadFiles = async (files: FileList) => {
+    if (!isLoaded) {
+      console.log("BasePath not loaded yet, cannot upload files");
+      return;
+    }
+
     const fileArray = Array.from(files);
 
     const initialProgress: UploadProgress[] = fileArray.map((file) => ({
