@@ -1,0 +1,52 @@
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+
+Copyright (C) 2024 S3 File Uploader Project
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+ADDITIONAL TERMS FOR PUBLIC USE:
+
+If you modify this software and make it available to the public as a service
+(including but not limited to web services, SaaS, or any network-accessible
+application), you MUST:
+
+1. Fork this repository on the original hosting platform
+2. Make your modifications available under the same AGPL v3 license
+3. Provide a clear link back to the original repository
+4. Submit your changes back to the original repository via pull request
+5. Include this license and attribution in any derivative works
+
+This ensures that improvements benefit the entire community while maintaining
+the open-source nature of the project.
+
+For the complete AGPL v3 license text, visit:
+https://www.gnu.org/licenses/agpl-3.0.html
+
+---
+
+TÉRMINOS ADICIONALES PARA USO PÚBLICO:
+
+Si modificas este software y lo haces disponible al público como servicio
+(incluyendo pero no limitado a servicios web, SaaS, o cualquier aplicación
+accesible por red), DEBES:
+
+1. Hacer fork de este repositorio en la plataforma de hosting original
+2. Hacer tus modificaciones disponibles bajo la misma licencia AGPL v3
+3. Proporcionar un enlace claro de vuelta al repositorio original
+4. Enviar tus cambios de vuelta al repositorio original vía pull request
+5. Incluir esta licencia y atribución en cualquier trabajo derivado
+
+Esto asegura que las mejoras beneficien a toda la comunidad mientras se
+mantiene la naturaleza open-source del proyecto.

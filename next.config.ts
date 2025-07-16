@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
 
   // Configuración de trailing slash para compatibilidad
   trailingSlash: true,
+
+  // Habilitar salida standalone para Docker ultra-liviano
+  output: 'standalone',
+
+  // Configuración para rastreo de archivos optimizado
+  outputFileTracingRoot: process.cwd(),
 };
 
 export default nextConfig;
