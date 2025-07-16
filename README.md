@@ -1,14 +1,66 @@
 # S3 File Uploader
 
-Aplicación web para subir archivos a Amazon S3 de forma segura y sencilla.
+Aplicación web para subir archivos a Amazon S3 de forma segura y sencilla con autenticación y autorización integrada.
 
 ## 🚀 Características
 
+- **Autenticación con Keycloak**: Sistema de login seguro con SSO
+- **Autorización basada en roles**: Control de acceso granular
 - **Subida de archivos a S3**: Compatible con AWS S3, MinIO y otros servicios S3
 - **SSR (Server-Side Rendering)**: Sin problemas de CORS
 - **Interfaz moderna**: UI responsive con modo oscuro
 - **Validación en tiempo real**: Verificación de configuración antes de subir
 - **Gestión de carpetas**: Organización de archivos personalizada
+- **Middleware de protección**: Rutas protegidas automáticamente
+
+## 🔐 Sistema de Autenticación
+
+La aplicación utiliza **NextAuth.js** con **Keycloak** como proveedor de identidad, ofreciendo:
+
+- **Single Sign-On (SSO)**: Integración con sistemas existentes
+- **Gestión de roles**: Control de acceso basado en roles de Keycloak
+- **Sesiones seguras**: Tokens JWT con renovación automática
+- **Páginas personalizadas**: Login y error pages adaptadas
+
+### Roles Predefinidos
+
+- **admin/administrator**: Acceso completo a todas las funciones
+- **uploader**: Puede subir archivos
+- **moderator**: Puede eliminar archivos
+- **user**: Acceso básico (solo visualización)
+
+## 🔧 Configuración
+
+### Variables de Entorno
+
+Crea un archivo `.env.local` basado en `.env.example`:
+
+```bash
+# NextAuth.js Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here
+
+# Keycloak Configuration
+KEYCLOAK_CLIENT_ID=your-keycloak-client-id
+KEYCLOAK_CLIENT_SECRET=your-keycloak-client-secret
+KEYCLOAK_ISSUER=https://your-keycloak-server.com/realms/your-realm
+```
+
+### Configuración de Keycloak
+
+1. **Crear un Cliente en Keycloak**:
+   - Client ID: `s3uploader`
+   - Client Protocol: `openid-connect`
+   - Access Type: `confidential`
+   - Valid Redirect URIs: `http://localhost:3000/api/auth/callback/keycloak`
+
+2. **Configurar Roles**:
+   - Crear roles: `admin`, `uploader`, `moderator`, `user`
+   - Asignar roles a usuarios según necesidades
+
+3. **Configurar Mappers** (opcional):
+   - Agregar mapper para grupos si usas grupos de Keycloak
+   - Configurar claims personalizados si es necesario
 
 ## 🔧 Configuración S3
 
