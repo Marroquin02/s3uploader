@@ -1,6 +1,11 @@
 import NextAuth from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import type { NextAuthOptions } from "next-auth";
+import {
+  type KeycloakProfile,
+  extractRolesFromKeycloakData,
+  decodeJWTPayload,
+} from "@/types/keycloak";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -23,92 +28,20 @@ export const authOptions: NextAuthOptions = {
         token.expiresAt = account.expires_at;
         token.idToken = account.id_token;
 
-        let roles: string[] = [];
-        let groups: string[] = [];
+        const keycloakProfile = profile as KeycloakProfile;
+        const { roles, groups } = extractRolesFromKeycloakData(keycloakProfile);
 
-        if ((profile as any).realm_access?.roles) {
-          roles = [...roles, ...(profile as any).realm_access.roles];
-        }
-
-        if ((profile as any).resource_access) {
-          const clientId = process.env.KEYCLOAK_CLIENT_ID;
-          if (clientId && (profile as any).resource_access[clientId]?.roles) {
-            roles = [
-              ...roles,
-              ...(profile as any).resource_access[clientId].roles,
-            ];
-          }
-
-          if ((profile as any).resource_access.account?.roles) {
-            roles = [
-              ...roles,
-              ...(profile as any).resource_access.account.roles,
-            ];
-          }
-        }
-
-        if ((profile as any).roles) {
-          roles = [...roles, ...(profile as any).roles];
-        }
-
-        if ((profile as any).groups) {
-          groups = (profile as any).groups;
-        }
-
-        const defaultRoles = [
-          "default-roles-master",
-          "offline_access",
-          "uma_authorization",
-        ];
-        token.roles = [...new Set(roles)].filter(
-          (role) => !defaultRoles.includes(role)
-        );
-        token.groups = [...new Set(groups)];
+        token.roles = roles;
+        token.groups = groups;
       }
 
-      if (token.accessToken && !token.roles?.length) {
-        try {
-          const base64Url = (token.accessToken as string).split(".")[1];
-          const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-          const jsonPayload = decodeURIComponent(
-            atob(base64)
-              .split("")
-              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-              .join("")
-          );
-          const payload = JSON.parse(jsonPayload);
+      if (token.accessToken && (!token.roles || token.roles.length === 0)) {
+        const payload = decodeJWTPayload(token.accessToken as string);
 
-          let roles: string[] = [];
-          let groups: string[] = [];
-
-          if (payload.realm_access?.roles) {
-            roles = [...roles, ...payload.realm_access.roles];
-          }
-
-          if (payload.resource_access) {
-            const clientId = process.env.KEYCLOAK_CLIENT_ID;
-            if (clientId && payload.resource_access[clientId]?.roles) {
-              roles = [...roles, ...payload.resource_access[clientId].roles];
-            }
-          }
-
-          if (payload.groups) {
-            groups = payload.groups;
-          }
-
-          const defaultRoles = [
-            "default-roles-master",
-            "offline_access",
-            "uma_authorization",
-          ];
-          token.roles = [...new Set(roles)].filter(
-            (role) => !defaultRoles.includes(role)
-          );
-          token.groups = [...new Set(groups)];
-        } catch (error) {
-          if (process.env.NODE_ENV === "development") {
-            console.error("Error decoding access token:", error);
-          }
+        if (payload) {
+          const { roles, groups } = extractRolesFromKeycloakData(payload);
+          token.roles = roles;
+          token.groups = groups;
         }
       }
 
