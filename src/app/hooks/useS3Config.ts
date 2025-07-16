@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { S3Config } from "@/types/s3-explorer";
+import { S3Config } from "../../types/s3-explorer";
 import { useSecureStorage } from "./useSecureStorage";
 
 // Configuración desde variables de entorno

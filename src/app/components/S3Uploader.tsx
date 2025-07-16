@@ -6,7 +6,7 @@ import { useS3Config } from "../hooks/useS3Config";
 import { PasswordUnlock } from "./PasswordUnlock";
 import { S3ConfigForm } from "./S3ConfigForm";
 import S3FileExplorer from "./S3FileExplorer";
-import { S3Config } from "@/types/s3-explorer";
+import { S3Config } from "../../types/s3-explorer";
 
 export default function S3Uploader() {
   const { buildApiPath } = useBasePath();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { S3Config } from '@/types/s3-explorer';
+import { S3Config } from '../../types/s3-explorer';
 
 interface S3ConfigFormProps {
   onSave: (config: S3Config, password: string) => Promise<void>;

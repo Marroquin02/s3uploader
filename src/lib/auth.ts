@@ -4,7 +4,7 @@ import {
   type KeycloakProfile,
   extractRolesFromKeycloakData,
   decodeJWTPayload,
-} from "@/types/keycloak";
+} from "../types/keycloak";
 
 export const authOptions: NextAuthOptions = {
   providers: [
