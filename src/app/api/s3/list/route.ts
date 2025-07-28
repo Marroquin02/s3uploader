@@ -40,7 +40,6 @@ export async function POST(request: NextRequest) {
     const folders = (response.CommonPrefixes || []).map((prefix) => {
       const fullPath = prefix.Prefix || "";
       // Remover el prefix actual y el slash final para obtener solo el nombre de la carpeta
-      const nameWithoutPrefix = fullPath.replace(prefix.Prefix || "", "");
       const folderName = fullPath.replace(/\/$/, "").split("/").pop() || "";
 
       return {

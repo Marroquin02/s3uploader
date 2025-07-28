@@ -23,13 +23,7 @@ export default function S3FileExplorer({
 
   const memoizedS3Config = useMemo(
     () => s3Config,
-    [
-      s3Config.endpoint,
-      s3Config.accessKeyId,
-      s3Config.secretAccessKey,
-      s3Config.bucket,
-      s3Config.region,
-    ]
+    [s3Config]
   );
 
   const [state, setState] = useState<FileExplorerState>({
@@ -160,7 +154,7 @@ export default function S3FileExplorer({
 
     loadInitialFiles();
   }, [
-    s3Config,
+    memoizedS3Config,
     isConfigValid,
     isBasePathLoaded,
     memoizedS3Config.endpoint,

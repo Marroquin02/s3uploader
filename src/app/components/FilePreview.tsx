@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { S3Item } from "../../types/s3-explorer";
+import Image from "next/image";
+import { S3Item, S3Config } from "../../types/s3-explorer";
 
 interface FilePreviewProps {
   item: S3Item;
-  s3Config: any;
+  s3Config: S3Config;
   buildApiPath: (path: string) => string;
   onClose: () => void;
 }
@@ -44,7 +45,7 @@ export default function FilePreview({
         } else {
           setError(result.error || "Error al cargar vista previa");
         }
-      } catch (error) {
+      } catch {
         setError("Error al cargar vista previa");
       } finally {
         setLoading(false);
@@ -52,7 +53,7 @@ export default function FilePreview({
     };
 
     loadPreview();
-  }, [item.fullPath, s3Config, buildApiPath]);
+  }, [item.fullPath, item.type, s3Config, buildApiPath]);
 
   const getFileExtension = (filename: string) => {
     return filename.split(".").pop()?.toLowerCase() || "";
@@ -101,7 +102,7 @@ export default function FilePreview({
       } else {
         setError(result.error || "Error al descargar archivo");
       }
-    } catch (error) {
+    } catch {
       setError("Error al descargar archivo");
     }
   };
@@ -149,10 +150,12 @@ export default function FilePreview({
           {!loading && !error && previewUrl && (
             <div className="text-center">
               {isImage(item.name) && (
-                <img
+                <Image
                   src={previewUrl}
                   alt={item.name}
-                  className="max-w-full max-h-[70vh] mx-auto rounded"
+                  width={800}
+                  height={600}
+                  className="max-w-full max-h-[70vh] mx-auto rounded object-contain"
                 />
               )}
 
