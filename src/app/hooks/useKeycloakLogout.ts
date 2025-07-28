@@ -27,9 +27,6 @@ export function useKeycloakLogout() {
 
         window.location.href = logoutUrl;
       } else {
-        console.warn(
-          "Keycloak configuration not found for complete logout. Using fallback."
-        );
         await signOut({ callbackUrl: `${basePath}/` });
       }
     } catch (error) {

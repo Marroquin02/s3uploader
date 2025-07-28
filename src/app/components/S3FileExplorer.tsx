@@ -19,7 +19,7 @@ export default function S3FileExplorer({
   s3Config,
   isConfigValid,
 }: S3FileExplorerProps) {
-  const { buildApiPath } = useBasePath();
+  const { buildApiPath, isLoaded: isBasePathLoaded } = useBasePath();
 
   const memoizedS3Config = useMemo(
     () => s3Config,
@@ -49,7 +49,7 @@ export default function S3FileExplorer({
 
   const loadFiles = useCallback(
     async (path: string = "") => {
-      if (!isConfigValid) return;
+      if (!isConfigValid || !isBasePathLoaded) return;
 
       setState((prev) => ({ ...prev, loading: true, error: null }));
 
@@ -87,7 +87,7 @@ export default function S3FileExplorer({
         }));
       }
     },
-    [memoizedS3Config, isConfigValid, buildApiPath]
+    [memoizedS3Config, isConfigValid, isBasePathLoaded, buildApiPath]
   );
 
   useEffect(() => {
@@ -110,6 +110,7 @@ export default function S3FileExplorer({
     const loadInitialFiles = async () => {
       if (
         !isConfigValid ||
+        !isBasePathLoaded ||
         !memoizedS3Config.endpoint ||
         !memoizedS3Config.accessKeyId ||
         !memoizedS3Config.secretAccessKey ||
@@ -161,12 +162,14 @@ export default function S3FileExplorer({
   }, [
     s3Config,
     isConfigValid,
+    isBasePathLoaded,
     memoizedS3Config.endpoint,
     memoizedS3Config.accessKeyId,
     memoizedS3Config.secretAccessKey,
     memoizedS3Config.bucket,
     memoizedS3Config.region,
     hasLoadedInitially,
+    buildApiPath,
   ]);
 
   const navigateToFolder = (folderPath: string) => {

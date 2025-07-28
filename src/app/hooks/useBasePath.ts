@@ -18,7 +18,7 @@ export function useBasePath() {
     const configuredBasePath =
       config?.basePath || process.env.NEXT_PUBLIC_BASE_PATH || "";
     setBasePath(configuredBasePath);
-    setIsLoaded(true); 
+    setIsLoaded(true);
   }, []);
 
   /**
@@ -26,10 +26,21 @@ export function useBasePath() {
    * @param apiPath - Ruta de la API (ej: '/api/s3/test-connection')
    * @returns Ruta completa con basePath
    */
-  const buildApiPath = useCallback((apiPath: string) => {
-    const normalizedApiPath = apiPath.startsWith("/") ? apiPath : `/${apiPath}`;
-    return `${basePath}${normalizedApiPath}`;
-  }, [basePath]);
+  const buildApiPath = useCallback(
+    (apiPath: string) => {
+      // Asegurar que el basePath esté cargado antes de construir la URL
+      if (!isLoaded) {
+        return apiPath; // Fallback temporal
+      }
+      const normalizedApiPath = apiPath.startsWith("/")
+        ? apiPath
+        : `/${apiPath}`;
+      const fullPath = `${basePath}${normalizedApiPath}`;
+
+      return fullPath;
+    },
+    [basePath, isLoaded]
+  );
 
   return {
     basePath,

@@ -37,27 +37,34 @@ export async function POST(request: NextRequest) {
 
     const response = await s3Client.send(command);
 
-    const folders = (response.CommonPrefixes || []).map((prefix) => ({
-      name:
-        prefix.Prefix?.replace(
-          (prefix.Prefix.slice(0, -1).lastIndexOf("/") + 1).toString(),
-          ""
-        ).slice(0, -1) || "",
-      fullPath: prefix.Prefix || "",
-      type: "folder" as const,
-      size: 0,
-      lastModified: null,
-    }));
+    const folders = (response.CommonPrefixes || []).map((prefix) => {
+      const fullPath = prefix.Prefix || "";
+      // Remover el prefix actual y el slash final para obtener solo el nombre de la carpeta
+      const nameWithoutPrefix = fullPath.replace(prefix.Prefix || "", "");
+      const folderName = fullPath.replace(/\/$/, "").split("/").pop() || "";
+
+      return {
+        name: folderName,
+        fullPath: fullPath,
+        type: "folder" as const,
+        size: 0,
+        lastModified: null,
+      };
+    });
 
     const files = (response.Contents || [])
       .filter((obj) => obj.Key !== prefix && !obj.Key?.endsWith("/"))
-      .map((obj) => ({
-        name: obj.Key?.split("/").pop() || "",
-        fullPath: obj.Key || "",
-        type: "file" as const,
-        size: obj.Size || 0,
-        lastModified: obj.LastModified?.toISOString() || null,
-      }));
+      .map((obj) => {
+        const fileName = obj.Key?.split("/").pop() || "";
+
+        return {
+          name: fileName,
+          fullPath: obj.Key || "",
+          type: "file" as const,
+          size: obj.Size || 0,
+          lastModified: obj.LastModified?.toISOString() || null,
+        };
+      });
 
     return NextResponse.json({
       success: true,
