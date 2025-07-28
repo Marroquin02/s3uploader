@@ -8,6 +8,7 @@ import {
   FileExplorerState,
   UploadProgress,
 } from "../../types/s3-explorer";
+import FilePreview from "./FilePreview";
 
 interface S3FileExplorerProps {
   s3Config: S3Config;
@@ -44,6 +45,7 @@ export default function S3FileExplorer({
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
+  const [previewFile, setPreviewFile] = useState<S3Item | null>(null);
 
   const loadFiles = useCallback(
     async (path: string = "") => {
@@ -415,7 +417,7 @@ export default function S3FileExplorer({
             <span>/</span>
             {state.currentPath
               .split("/")
-              .filter(Boolean)
+              .filter((part) => part !== "")
               .map((part, index, array) => (
                 <span key={index} className="flex items-center gap-2">
                   <button
@@ -599,9 +601,12 @@ export default function S3FileExplorer({
                             {item.name}
                           </button>
                         ) : (
-                          <span className="text-gray-800 dark:text-gray-200">
+                          <button
+                            onClick={() => setPreviewFile(item)}
+                            className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline"
+                          >
                             {item.name}
-                          </span>
+                          </button>
                         )}
                       </div>
                     </td>
@@ -612,12 +617,22 @@ export default function S3FileExplorer({
                       {formatDate(item.lastModified)}
                     </td>
                     <td className="py-3 px-4">
-                      <button
-                        onClick={() => deleteFile(item)}
-                        className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm"
-                      >
-                        🗑️ Eliminar
-                      </button>
+                      <div className="flex gap-2">
+                        {item.type === "file" && (
+                          <button
+                            onClick={() => setPreviewFile(item)}
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm"
+                          >
+                            👁️ Vista previa
+                          </button>
+                        )}
+                        <button
+                          onClick={() => deleteFile(item)}
+                          className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm"
+                        >
+                          🗑️ Eliminar
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -625,6 +640,16 @@ export default function S3FileExplorer({
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* Vista previa de archivo */}
+      {previewFile && (
+        <FilePreview
+          item={previewFile}
+          s3Config={memoizedS3Config}
+          buildApiPath={buildApiPath}
+          onClose={() => setPreviewFile(null)}
+        />
       )}
     </div>
   );
